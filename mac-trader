@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+import subprocess
+from sys import argv as argumennt
+from os import geteuid 
+from sys import exit
+import argparse
+from random import randint
+
+G = '\033[92m'  
+Y = '\033[93m'  
+B = '\033[94m'  
+R = '\033[91m' 
+W = '\033[0m'
+
+def rand_mac():
+    mac = [ 0x00, 0x24, 0x81,
+     randint(0x00, 0x7f),
+     randint(0x00, 0xff),
+     randint(0x00, 0xff) ]
+    k = (':'.join(map(lambda x: "%02x" % x, mac)))
+    return k
+
+def parse_args():
+    parser = argparse.ArgumentParser(epilog='\tExample: \r\nsudo ' + argumennt[0] + " -i wlan0 -m 00:11:22:33:44")
+    parser._optionals.title = "OPTIONS"
+    parser.add_argument("-i",'--interface' ,help="To select the interface to use",required=True)
+    parser.add_argument("-m",'--mac' ,help="To specify the macaddress",default=None)
+    parser.add_argument("-r","--random",help="to set a random mac address",nargs='?',default=False)
+    return parser.parse_args()
+
+def main():
+    args=parse_args()
+    interface = args.interface
+    new_mac = args.mac
+    random=args.random
+
+    if random is None:
+        new_mac = rand_mac()
+    
+    print(G+"\n changing mac-address for " + interface+" to " + new_mac + W)
+    subprocess.call(["ifconfig",interface,"down"])
+    subprocess.call(["ifconfig",interface,"hw","ether",new_mac])
+    subprocess.call(["ifconfig",interface,"up"])
+
+if __name__=="__main__":
+    if geteuid() == 0:
+        try:
+            main()
+        except NameError:
+            print(f''' 
+                Example :
+                    python3 {argumennt[0]} -i wlan0 -m 00:11:22:33:44 
+            ''')
+        except:
+            print("\n Bye exiting")
+    else:
+        print(R+"\n Script needs root user permission to do task \n"+W)
