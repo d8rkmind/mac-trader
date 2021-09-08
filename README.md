@@ -17,7 +17,7 @@ sudo ./mac-trader -i <interface name> -r
 flags | uses
 ------|-----
 -i|to specify interface card
--m|to gave a specific mac address 
+-m|to give a specific mac address 
 -r|to give a random mac address
 
 
