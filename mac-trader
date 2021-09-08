@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import subprocess
+from subprocess import call
 from sys import argv as argumennt
 from os import geteuid 
 from sys import exit
@@ -39,9 +39,9 @@ def main():
         new_mac = rand_mac()
     
     print(G+"\n changing mac-address for " + interface+" to " + new_mac + W)
-    subprocess.call(["ifconfig",interface,"down"])
-    subprocess.call(["ifconfig",interface,"hw","ether",new_mac])
-    subprocess.call(["ifconfig",interface,"up"])
+    call(["ifconfig",interface,"down"])
+    call(["ifconfig",interface,"hw","ether",new_mac])
+    call(["ifconfig",interface,"up"])
 
 if __name__=="__main__":
     if geteuid() == 0:
