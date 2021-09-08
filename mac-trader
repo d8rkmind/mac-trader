@@ -50,7 +50,7 @@ def main():
     call(["ifconfig",interface,"down"])
     call(["ifconfig",interface,"hw","ether",new_mac])
     call(["ifconfig",interface,"up"])
-    print(Y+"\n Current mac-address :"+str(check(interface))+W)
+    print(Y+"\n Current mac-address : "+str(check(interface))+W)
     
 
 if __name__=="__main__":
