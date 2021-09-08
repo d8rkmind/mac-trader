@@ -45,7 +45,7 @@ def main():
 
     if random is None:
         new_mac = rand_mac()
-    print(G+"\n Current mac address : "+str(check(interface))+W)
+    print(G+"\n Mac address before changing : "+str(check(interface))+W)
     print(G+"\n changing mac-address for " + interface+" to " + new_mac + W)
     call(["ifconfig",interface,"down"])
     call(["ifconfig",interface,"hw","ether",new_mac])
