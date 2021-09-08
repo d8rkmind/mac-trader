@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import re
 from subprocess import call
 from sys import argv as argumennt
 from os import geteuid 
@@ -12,6 +13,12 @@ Y = '\033[93m'
 B = '\033[94m'  
 R = '\033[91m' 
 W = '\033[0m'
+
+
+def check(interface):
+    output=bytes(check_output(['ifconfig',interface]))
+    mac_addr_search = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w",output.decode('utf-8'),)  #regex rule
+    return mac_addr_search.group(0)
 
 def rand_mac():
     mac = [ 0x00, 0x24, 0x81,
@@ -37,11 +44,13 @@ def main():
 
     if random is None:
         new_mac = rand_mac()
-    
+    print(G+"\n Current mac address : "+str(check(interface))+W)
     print(G+"\n changing mac-address for " + interface+" to " + new_mac + W)
     call(["ifconfig",interface,"down"])
     call(["ifconfig",interface,"hw","ether",new_mac])
     call(["ifconfig",interface,"up"])
+    print(Y+"\n Current mac-address :"+str(check(interface))+W)
+    
 
 if __name__=="__main__":
     if geteuid() == 0:
