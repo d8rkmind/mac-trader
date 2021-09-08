@@ -2,6 +2,7 @@
 
 import re
 from subprocess import call
+from subprocess import check_output
 from sys import argv as argumennt
 from os import geteuid 
 from sys import exit
